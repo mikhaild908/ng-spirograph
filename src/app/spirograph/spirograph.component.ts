@@ -21,7 +21,10 @@ export class SpirographComponent implements OnInit {
   ngOnInit() {
     const xc = 250;
     const yc = 250;
-    const R = 220;
+    // const R = 220;
+    // const r = 65;
+    // const l = 0.8;
+    const R = 150;
     const r = 65;
     const l = 0.8;
 
@@ -46,12 +49,13 @@ export class SpirographComponent implements OnInit {
   private drawSpirograph(): void {
     const ctx: CanvasRenderingContext2D = this.canvasRef.nativeElement.getContext('2d');
     ctx.beginPath();
-    ctx.fillStyle = 'black';
 
     let theta = 0;
     const R = this.R;
     const k = this.k;
     const l = this.l;
+
+    const max = 360 * this.nRot;
 
     for (let i = 0; i < 360 * this.nRot + 1; i++) {
       theta = this.toRadians(i);
@@ -59,10 +63,20 @@ export class SpirographComponent implements OnInit {
       const x = R * ((1 - k) * Math.cos(theta) + l * k * Math.cos((1 - k) * theta / k));
       const y = R * ((1 - k) * Math.sin(theta) - l * k * Math.sin((1 - k) * theta / k));
 
+      ctx.fillStyle = this.getColor(0, this.mapTo256(i, max), this.mapTo256(i, max), 1);
+
       ctx.fillRect(this.xc + x, this.yc + y, 1, 1);
     }
 
     ctx.fill();
+  }
+
+  private mapTo256(value: number, max: number): number {
+    return 256 / max * value;
+  }
+
+  private getColor(r: number, g: number, b: number, a: number): string {
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
   }
 
   private gcd(a: number, b: number): number {
