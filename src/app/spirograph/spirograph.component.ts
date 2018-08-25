@@ -19,11 +19,13 @@ export class SpirographComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    const xc = 250;
-    const yc = 250;
+    const xc = this.getCanvasWidth() / 2;
+    const yc = this.getCanvasHeight() / 2;
+
     // const R = 220;
     // const r = 65;
     // const l = 0.8;
+
     const R = 150;
     const r = 65;
     const l = 0.8;
@@ -105,5 +107,13 @@ export class SpirographComponent implements OnInit {
     }
 
     ctx.fill();
+  }
+
+  private getCanvasHeight(): number {
+    return this.canvasRef.nativeElement.height;
+  }
+
+  private getCanvasWidth(): number {
+    return this.canvasRef.nativeElement.width;
   }
 }
