@@ -1,4 +1,71 @@
 <div class='container' style='text-align:center'>
   <h1>{{title}}</h1>
-  <app-spirograph></app-spirograph>
+  <app-spirograph #spirograph
+                  [(R)]='R'
+                  [(r)]='r'
+                  [(l)]='l'
+                  [(red)]='red'
+                  [(green)]='green'
+                  [(blue)]='blue'>
+  </app-spirograph>
+  
+  <mat-card>
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>R</mat-label>
+        <input matInput
+          [(ngModel)]='R'
+          required />
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <mat-label>r</mat-label>
+        <input matInput
+          [(ngModel)]='r'
+          required />
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <mat-label>l</mat-label>
+        <input matInput
+          [(ngModel)]='l'
+          required />
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <mat-label>Red</mat-label>
+        <input matInput
+          [(ngModel)]='red'
+          required />
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <mat-label>Green</mat-label>
+        <input matInput
+          [(ngModel)]='green'
+          required />
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <mat-label>Blue</mat-label>
+        <input matInput
+          [(ngModel)]='blue'
+          required />
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <mat-label>Alpha</mat-label>
+        <input matInput
+          [(ngModel)]='alpha'
+          required />
+      </mat-form-field>
+      <br />
+
+      <button mat-flat-button color="primary" (click)='onDrawSpirograph()'>Draw</button>
+      <!-- <h6>R: {{R}}</h6>
+      <h6>r: {{r}}</h6>
+      <h6>l: {{l}}</h6> -->
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-spirograph',
@@ -8,31 +8,27 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 export class SpirographComponent implements OnInit {
   @ViewChild('myCanvas') canvasRef: ElementRef;
 
+  @Input() R: number; // 220; // 150;
+  @Input() r: number; // 65
+  @Input() l: number; // 0.8
+
+  @Input() red = 255;
+  @Input() green = 255;
+  @Input() blue = 255;
+  @Input() alpha = 1.0;
+
   private xc: number;
   private yc: number;
-  private R: number;
-  private r: number;
-  private l: number;
   private k: number;
   private nRot: number;
 
   constructor() { }
 
   ngOnInit() {
-    const xc = this.getCanvasWidth() / 2;
-    const yc = this.getCanvasHeight() / 2;
-
-    // const R = 220;
-    // const r = 65;
-    // const l = 0.8;
-
-    const R = 150;
-    const r = 65;
-    const l = 0.8;
-
-    this.setParameters(xc, yc, R, r, l);
-
-    this.drawSpirograph();
+    if (this.R && this.r && this.l) {
+      this.setParameters(this.getCanvasWidth() / 2, this.getCanvasHeight() / 2, this.R, this.r, this.l);
+      this.drawSpirograph();
+    }
   }
 
   private setParameters(xc: number, yc: number, R: number, r: number, l: number): void {
@@ -46,31 +42,6 @@ export class SpirographComponent implements OnInit {
 
     this.k = r / R;
     this.nRot = this.r / gcdVal;
-  }
-
-  private drawSpirograph(): void {
-    const ctx: CanvasRenderingContext2D = this.canvasRef.nativeElement.getContext('2d');
-    ctx.beginPath();
-
-    let theta = 0;
-    const R = this.R;
-    const k = this.k;
-    const l = this.l;
-
-    const max = 360 * this.nRot;
-
-    for (let i = 0; i < 360 * this.nRot + 1; i++) {
-      theta = this.toRadians(i);
-
-      const x = R * ((1 - k) * Math.cos(theta) + l * k * Math.cos((1 - k) * theta / k));
-      const y = R * ((1 - k) * Math.sin(theta) - l * k * Math.sin((1 - k) * theta / k));
-
-      ctx.fillStyle = this.getColor(0, this.mapTo256(i, max), this.mapTo256(i, max), 1);
-
-      ctx.fillRect(this.xc + x, this.yc + y, 1, 1);
-    }
-
-    ctx.fill();
   }
 
   private mapTo256(value: number, max: number): number {
@@ -115,5 +86,38 @@ export class SpirographComponent implements OnInit {
 
   private getCanvasWidth(): number {
     return this.canvasRef.nativeElement.width;
+  }
+
+  private drawSpirograph(): void {
+    const ctx: CanvasRenderingContext2D = this.canvasRef.nativeElement.getContext('2d');
+    ctx.clearRect(0, 0, this.getCanvasWidth(), this.getCanvasHeight());
+    ctx.beginPath();
+
+    ctx.fillStyle = this.getColor(this.red, this.green, this.blue, this.alpha);
+
+    let theta = 0;
+    const R = this.R;
+    const k = this.k;
+    const l = this.l;
+
+    const max = 360 * this.nRot;
+
+    for (let i = 0; i < 360 * this.nRot + 1; i++) {
+      theta = this.toRadians(i);
+
+      const x = R * ((1 - k) * Math.cos(theta) + l * k * Math.cos((1 - k) * theta / k));
+      const y = R * ((1 - k) * Math.sin(theta) - l * k * Math.sin((1 - k) * theta / k));
+
+      // ctx.fillStyle = this.getColor(0, this.mapTo256(i, max), this.mapTo256(i, max), 1);
+
+      ctx.fillRect(this.xc + x, this.yc + y, 1, 1);
+    }
+
+    ctx.fill();
+  }
+
+  public draw(): void {
+    this.setParameters(this.getCanvasWidth() / 2, this.getCanvasHeight() / 2, this.R, this.r, this.l);
+    this.drawSpirograph();
   }
 }
